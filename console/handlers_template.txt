@@ -1,0 +1,105 @@
+package {{nameS}}
+
+import (
+	"fmt"
+
+	"github.com/gofiber/fiber/v2"
+	"github.com/wisniewski91/clothes-factory/internal/storage"
+	"github.com/wisniewski91/clothes-factory/internal/utils"
+)
+
+var (
+	repo    *Mysql{{capitalNameS}}Repository
+	service *{{capitalNameS}}Service
+)
+
+func Init() {
+	repo = NewMysql{{capitalNameS}}Repository(storage.DB)
+	service = New{{capitalNameS}}Service(repo)
+}
+
+func indexHandler(c *fiber.Ctx) error {
+	result, err := service.repository.FetchAll()
+	if err != nil {
+		c.Response().Header.Add("HX-Retarget", "#notification-container")
+		c.Response().Header.Add("HX-Reswap", "beforeend")
+		return c.SendString(utils.CreateNotification("Problem loading {{nameS}}!", utils.ErrorNotification{}))
+	}
+	pageData := utils.PreparePageData("{{capitalNameS}}", "{{capitalNameS}} - list", routePath, result)
+	return utils.Render(c, renderPath("index"), pageData)
+}
+
+func createHandler(c *fiber.Ctx) error {
+	pageData := utils.PreparePageData("{{capitalNameS}}", "Create {{capitalNameS}}", routePath, nil)
+
+	return utils.Render(c, renderPath("modal", "create"), pageData)
+}
+
+func createPostHandler(c *fiber.Ctx) error {
+	var {{name}} {{capitalName}}Record
+
+	err := c.BodyParser(&{{name}})
+	if err != nil {
+		return c.SendString(utils.CreateNotification("Problem parsing {{name}} data", utils.ErrorNotification{}))
+	}
+	err = utils.Validate({{name}})
+	if err != nil {
+		return c.SendString(utils.CreateNotification(err.Error(), utils.ErrorNotification{}))
+	}
+
+	result, err := service.Create(&{{name}})
+	if err != nil {
+		return c.SendString(utils.CreateNotification(err.Error(), utils.ErrorNotification{}))
+	}
+
+	return c.SendString(utils.CreateNotification(fmt.Sprintf("{{capitalName}} %s created", result.Name), utils.SuccessNotification{}))
+}
+
+func editHandler(c *fiber.Ctx) error {
+	id, err := c.ParamsInt("id")
+	if err != nil {
+		return c.SendString(utils.CreateNotification("Problem parsing url param", utils.ErrorNotification{}))
+	}
+
+	{{name}}, err := service.repository.Fetch(id)
+	if err != nil {
+		return c.SendString(utils.CreateNotification("No {{capitalName}} with provided id", utils.ErrorNotification{}))
+	}
+	pageData := utils.PreparePageData("{{capitalNameS}}", "Edit {{capitalName}}", routePath, {{name}})
+
+	return utils.Render(c, renderPath("modal", "edit"), pageData)
+}
+
+func editPostHandler(c *fiber.Ctx) error {
+	id, err := c.ParamsInt("id")
+	if err != nil {
+		return c.SendString(utils.CreateNotification("Problem parsing url param", utils.ErrorNotification{}))
+	}
+	{{name}}, err := service.repository.Fetch(id)
+	if err != nil {
+		return c.SendString(utils.CreateNotification("{{capitalName}} not exists", utils.ErrorNotification{}))
+	}
+	err = utils.Validate({{name}})
+	if err != nil {
+		return c.SendString(utils.CreateNotification(err.Error(), utils.ErrorNotification{}))
+	}
+
+	var post{{capitalName}} {{capitalName}}Record
+
+	err = c.BodyParser(&post{{capitalName}})
+	if err != nil {
+		return c.SendString(utils.CreateNotification("Problem parsing {{name}} form data", utils.ErrorNotification{}))
+	}
+	err = utils.Validate(post{{capitalName}})
+	if err != nil {
+		return c.SendString(utils.CreateNotification(err.Error(), utils.ErrorNotification{}))
+	}
+	post{{capitalName}}.Id = id
+
+	result, err := service.repository.Update(&post{{capitalName}})
+	if err != nil {
+		return c.SendString(utils.CreateNotification(err.Error(), utils.ErrorNotification{}))
+	}
+
+	return c.SendString(utils.CreateNotification(fmt.Sprintf("{{capitalName}} %s saved", result.Name), utils.SuccessNotification{}))
+}

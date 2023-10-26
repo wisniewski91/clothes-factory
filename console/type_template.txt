@@ -7,7 +7,11 @@ import (
 
 const tableName = "{{tableName}}"
 
-var modulePath = []string{"modules", "{{name}}"}
+var (
+	modulePath = []string{"modules", "{{nameS}}"}
+	routePath  = "{{nameS}}"
+)
+
 
 type {{capitalName}}Record struct {
 	Id        int
@@ -48,4 +52,15 @@ func New{{capitalNameS}}Service(r {{capitalNameS}}Repository) *{{capitalNameS}}S
 func renderPath(template ...string) string {
 	path := append(modulePath, template...)
 	return filepath.Join(path...)
+}
+
+func (e {{capitalName}}Record) Validate() error {
+	if e.Name == "" {
+		return utils.ValidateError{
+			Code:    -10,
+			Object:  "{{capitalName}}",
+			Message: "Name not provided",
+		}
+	}
+	return nil
 }

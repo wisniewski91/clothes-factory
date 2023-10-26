@@ -26,6 +26,11 @@ func generateModule(moduleName string, tableName string) {
 	generateTypeFile()
 	generateRepositoryFile()
 	generateServiceFile()
+	generateHandlersFile()
+	generateRoutesFile()
+	generateCreateFile()
+	generateEditFile()
+	generateIndexFile()
 }
 
 func main() {
@@ -101,12 +106,102 @@ func generateRepositoryFile() {
 	defer f.Close()
 }
 
+func generateHandlersFile() {
+	f, err := os.Create(filepath.Join(internalPath, "handlers.go"))
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	templateFile, err := os.ReadFile("./console/handlers_template.txt")
+	if err != err {
+		log.Fatal(err)
+	}
+
+	fileGo := string(templateFile)
+	fileGo = strings.ReplaceAll(fileGo, "{{name}}", name)
+	fileGo = strings.ReplaceAll(fileGo, "{{nameS}}", nameS)
+	fileGo = strings.ReplaceAll(fileGo, "{{capitalName}}", capital)
+	fileGo = strings.ReplaceAll(fileGo, "{{capitalNameS}}", capitalS)
+
+	os.WriteFile(filepath.Join(internalPath, "handlers.go"), []byte(fileGo), 0777)
+	defer f.Close()
+}
+
+func generateRoutesFile() {
+	f, err := os.Create(filepath.Join(internalPath, "routes.go"))
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	templateFile, err := os.ReadFile("./console/routes_template.txt")
+	if err != err {
+		log.Fatal(err)
+	}
+
+	fileGo := string(templateFile)
+	fileGo = strings.ReplaceAll(fileGo, "{{nameS}}", nameS)
+
+	os.WriteFile(filepath.Join(internalPath, "routes.go"), []byte(fileGo), 0777)
+	defer f.Close()
+}
+
+func generateIndexFile() {
+	f, err := os.Create(filepath.Join(viewPath, "index.html"))
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	templateFile, err := os.ReadFile("./console/templates/views/index.txt")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fileHtml := string(templateFile)
+	os.WriteFile(filepath.Join(viewPath, "index.html"), []byte(fileHtml), 0777)
+	defer f.Close()
+}
+func generateCreateFile() {
+	f, err := os.Create(filepath.Join(viewPath, "modal", "create.html"))
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	templateFile, err := os.ReadFile("./console/templates/views/create.txt")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fileHtml := string(templateFile)
+	os.WriteFile(filepath.Join(viewPath, "modal", "create.html"), []byte(fileHtml), 0777)
+	defer f.Close()
+}
+
+func generateEditFile() {
+	f, err := os.Create(filepath.Join(viewPath, "modal", "edit.html"))
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	templateFile, err := os.ReadFile("./console/templates/views/edit.txt")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fileHtml := string(templateFile)
+	os.WriteFile(filepath.Join(viewPath, "modal", "edit.html"), []byte(fileHtml), 0777)
+	defer f.Close()
+}
+
 func generateFolderStructure() {
 	err := os.Mkdir(internalPath, 0777)
 	if err != nil {
 		log.Fatal(err)
 	}
 	err = os.Mkdir(viewPath, 0777)
+	if err != nil {
+		log.Fatal(err)
+	}
+	err = os.Mkdir(filepath.Join(viewPath, "modal"), 0777)
 	if err != nil {
 		log.Fatal(err)
 	}

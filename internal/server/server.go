@@ -6,6 +6,7 @@ import (
 	"github.com/gofiber/template/html/v2"
 	"github.com/wisniewski91/clothes-factory/internal/clients"
 	jobtypes "github.com/wisniewski91/clothes-factory/internal/jobTypes"
+	"github.com/wisniewski91/clothes-factory/internal/parts"
 	"github.com/wisniewski91/clothes-factory/internal/storage"
 )
 
@@ -18,6 +19,7 @@ func StartServer() {
 
 	clients.Init()
 	jobtypes.Init()
+	parts.Init()
 
 	engine = html.New("./views/admin", ".html")
 
@@ -35,6 +37,7 @@ func StartServer() {
 
 	clients.SetupRoutes(app)
 	jobtypes.SetupRoutes(app)
+	parts.SetupRoutes(app)
 
 	app.Static("/static", "./static/admin")
 	app.Listen("localhost:4000")
