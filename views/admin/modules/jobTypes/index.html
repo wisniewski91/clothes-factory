@@ -1,0 +1,36 @@
+<div class="bar">
+    <h3>{{.PageInfo.ContentTitle}}</h3>
+    <div class="options">
+        <button hx-get="/{{.PageInfo.Path}}/create" hx-swap="innerHTML" hx-target="#modal-container"
+            hx-headers='{"Part-render": "true"}'>Create</button>
+    </div>
+</div>
+<div class="list">
+    <div class="bar">
+        <div>
+            <label>Search:
+                <input type="text" />
+            </label>
+        </div>
+        <div class="options"></div>
+    </div>
+    <table class="clients">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Options</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{range .Data}}
+            <tr>
+                <td>{{.Id}}</td>
+                <td>{{.Name}}</td>
+                <td> <button hx-get="/{{$.PageInfo.Path}}/edit/{{.Id}}" hx-swap="innerHTML" hx-target="#modal-container"
+                        hx-headers='{"Part-render": "true"}'>Edit</button></td>
+            </tr>
+            {{end}}
+        </tbody>
+    </table>
+</div>

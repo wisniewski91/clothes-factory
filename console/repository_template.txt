@@ -1,0 +1,91 @@
+package {{nameS}}
+
+import (
+	"fmt"
+)
+
+func (r *Mysql{{capitalNameS}}Repository) Fetch(id int) (*{{capitalName}}Record, error) {
+	if id <= 0 {
+		return nil, nil
+	}
+	query := fmt.Sprintf("SELECT * FROM `%s` WHERE id = ?", tableName)
+	var {{name}} {{capitalName}}Record
+
+	err := r.DB.QueryRow(query, id).Scan(&{{name}}.Id, &{{name}}.Name, &{{name}}.Status, &{{name}}.UpdatedAt, &{{name}}.CreatedAt)
+	if err != nil {
+		return nil, err
+	}
+
+	return &{{name}}, nil
+}
+
+func (r *Mysql{{capitalNameS}}Repository) FetchAll() (*[]{{capitalName}}Record, error) {
+	query := fmt.Sprintf("SELECT * FROM `%s`", tableName)
+	rows, err := r.DB.Query(query)
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+	var {{nameS}} []{{capitalName}}Record
+
+	for rows.Next() {
+		c := {{capitalName}}Record{}
+		err = rows.Scan(&c.Id, &c.Name, &c.Status, &c.UpdatedAt, &c.CreatedAt)
+		if err != nil {
+			return nil, err
+		}
+
+		{{nameS}} = append({{nameS}}, c)
+	}
+	return &{{nameS}}, nil
+}
+
+func (r *Mysql{{capitalNameS}}Repository) FetchPage(page int, limit int) (*[]{{capitalName}}Record, error) {
+	query := fmt.Sprintf("SELECT * FROM `%s` LIMIT %d OFFSET %d", tableName, limit, page*limit)
+	rows, err := r.DB.Query(query)
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+	var {{nameS}} []{{capitalName}}Record
+
+	for rows.Next() {
+		c := {{capitalName}}Record{}
+		err = rows.Scan(&c.Id, &c.Name, &c.Status, &c.UpdatedAt, &c.CreatedAt)
+		if err != nil {
+			return nil, err
+		}
+
+		{{nameS}} = append({{nameS}}, c)
+	}
+	return &{{nameS}}, nil
+}
+
+func (r *Mysql{{capitalNameS}}Repository) Update(data *{{capitalName}}Record) (*{{capitalName}}Record, error) {
+	query := fmt.Sprintf("UPDATE `%s` SET `name` = ? WHERE `id` = ?", tableName)
+	_, err := r.DB.Exec(query, data.Name, data.Id)
+	if err != nil {
+		return nil, err
+	}
+	return data, nil
+}
+
+func (r *Mysql{{capitalNameS}}Repository) Insert(data *{{capitalName}}Record) (*{{capitalName}}Record, error) {
+	query := fmt.Sprintf("INSERT INTO `%s` (`name`, `status`, `updated_at`, `created_at`) VALUES (?, 4, Now(), Now())", tableName)
+	_, err := r.DB.Exec(query, data.Name)
+	if err != nil {
+		return nil, err
+	}
+	return data, nil
+}
+
+func (r *Mysql{{capitalNameS}}Repository) Delete(id int) error {
+	query := fmt.Sprintf("DELETE FROM `%s` WHERE `id` = ?", tableName)
+	_, err := r.DB.Exec(query, id)
+	if err != nil {
+		return err
+	}
+	return nil
+}

@@ -1,0 +1,13 @@
+package clients
+
+import "github.com/gofiber/fiber/v2"
+
+func SetupRoutes(app *fiber.App) {
+	route := app.Group("/" + routePath)
+
+	route.Get("/index", indexHandler)
+	route.Get("/create", createHandler)
+	route.Post("/create", createPostHandler)
+	route.Get("/edit/:id", editHandler)
+	route.Post("/edit/:id", editPostHandler)
+}

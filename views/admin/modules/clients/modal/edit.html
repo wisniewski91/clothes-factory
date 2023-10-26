@@ -1,0 +1,42 @@
+<div class="modal" id="modal{{.PageInfo.Title}}">
+    <div class="modal-content">
+        <div class="bar">
+            <h3>{{.PageInfo.ContentTitle}}</h3>
+            <div class="options">
+                <button hx-post="/{{.PageInfo.Path}}/edit/{{.Data.Id}}" hx-include="#update{{.PageInfo.Title}}"
+                    hx-swap="beforeend" hx-target="#notification-container"
+                    onclick="closeModal('modal{{.PageInfo.Title}}')">Save</button>
+                <button onclick="closeModal('modal{{.PageInfo.Title}}')">Cancel</button>
+            </div>
+        </div>
+        <div class="modal-form" id="tab1">
+            <form id="update{{.PageInfo.Title}}">
+                <label>Name:
+                    <input type="text" name="name" value="{{.Data.Name}}">
+                </label>
+                <label>country:
+                    <input type="text" name="country" value="{{.Data.AddressData.Country}}">
+                </label>
+                <label>District:
+                    <input type="text" name="district" value="{{.Data.AddressData.District}}">
+                </label>
+                <label>City:
+                    <input type="text" name="city" value="{{.Data.AddressData.City}}">
+                </label>
+                <label>Postal code:
+                    <input type="text" name="postalCode" value="{{.Data.AddressData.PostalCode}}">
+                </label>
+                <label>Street:
+                    <input type="text" name="street" value="{{.Data.AddressData.Street}}">
+                </label>
+                <label>House number:
+                    <input type="text" name="houseNumber" value="{{.Data.AddressData.HouseNumber}}">
+                </label>
+                <label>Flat number:
+                    <input type="text" name="flatNumber" value="{{.Data.AddressData.FlatNumber}}">
+                </label>
+            </form>
+        </div>
+
+    </div>
+</div>

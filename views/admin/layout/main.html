@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://unpkg.com/htmx.org@1.9.5"></script>
+  <link rel="stylesheet" href="/static/css/styles.css" />
+  <link rel="shortcut icon" href="/static/favicon.png" type="image/x-icon" />
+  <script src="/static/js/main.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+  <title>{{ .PageInfo.Title }}</title>
+</head>
+
+<body class="content">
+  <div id="notification-container"></div>
+  <div id="modal-container"></div>
+
+  {{template "menu"}}
+  <div id="content">
+    {{embed}}
+  </div>
+
+</body>
+
+</html>

@@ -1,0 +1,31 @@
+{{define "menu"}}
+<div id="menu-panel">
+
+    <div class="menu">
+        <div class="profile" onclick="showContextMenu('profileMenu')">
+            <img src="/static/img/user-icon.svg">
+            <span>Profile</span>
+            <span>&#9776;</span>
+            <div class="context-menu-container">
+                <div id="profileMenu" class="context-menu">
+                    <a>Profile</a>
+                    <a>Settings</a>
+                    <a>About</a>
+                    <a>Logout</a>
+                </div>
+            </div>
+        </div>
+        <a>Projects</a>
+        <a onclick="toggleSubmenu('dataManager')">Data manager</a>
+        <div id="dataManager" class="sub-menu">
+            <a hx-get="/clients/index" hx-swap="innerHTML" hx-target="#content" hx-push-url="true"
+                hx-headers='{"Part-render": "true"}'>Clients</a>
+            <a hx-get="/jobtypes/index" hx-swap="innerHTML" hx-target="#content" hx-push-url="true"
+                hx-headers='{"Part-render": "true"}'>Job types</a>
+        </div>
+    </div>
+    <div class="logo">
+        <img src="/static/img/logo-web.svg">
+    </div>
+</div>
+{{end}}

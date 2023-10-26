@@ -1,0 +1,41 @@
+<div class="modal" id="modal{{.PageInfo.Title}}">
+    <div class="modal-content">
+        <div class="bar">
+            <h3>{{.PageInfo.ContentTitle}}</h3>
+            <div class="options">
+                <button hx-post="/{{.PageInfo.Path}}/create" hx-include="#create{{.PageInfo.Title}}"
+                    hx-swap="beforeend" hx-target="#notification-container"
+                    onclick="closeModal('modal{{.PageInfo.Title}}')">Create</button>
+                <button onclick="closeModal('modal{{.PageInfo.Title}}')">Cancel</button>
+            </div>
+        </div>
+        <div class="modal-form">
+            <form id="create{{.PageInfo.Title}}">
+                <label>Name:
+                    <input type="text" name="name">
+                </label>
+                <label>country:
+                    <input type="text" name="country">
+                </label>
+                <label>District:
+                    <input type="text" name="district">
+                </label>
+                <label>City:
+                    <input type="text" name="city">
+                </label>
+                <label>Postal code:
+                    <input type="text" name="postalCode">
+                </label>
+                <label>Street:
+                    <input type="text" name="street">
+                </label>
+                <label>House number:
+                    <input type="text" name="houseNumber">
+                </label>
+                <label>Flat number:
+                    <input type="text" name="flatNumber">
+                </label>
+            </form>
+        </div>
+    </div>
+</div>

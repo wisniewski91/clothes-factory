@@ -1,0 +1,51 @@
+package {{nameS}}
+
+import (
+	"database/sql"
+	"path/filepath"
+)
+
+const tableName = "{{tableName}}"
+
+var modulePath = []string{"modules", "{{name}}"}
+
+type {{capitalName}}Record struct {
+	Id        int
+	Status    int8
+	UpdatedAt string
+	CreatedAt string
+}
+
+type {{capitalNameS}}Repository interface {
+	Fetch(id int) (*{{capitalName}}Record, error)
+	FetchAll() (*[]{{capitalName}}Record, error)
+	FetchPage(page int, limit int) (*[]{{capitalName}}Record, error)
+	Insert(data *{{capitalName}}Record) (*{{capitalName}}Record, error)
+	Update(data *{{capitalName}}Record) (*{{capitalName}}Record, error)
+	Delete(id int) error
+}
+
+type Mysql{{capitalNameS}}Repository struct {
+	DB *sql.DB
+}
+
+func NewMysql{{capitalNameS}}Repository(db *sql.DB) *Mysql{{capitalNameS}}Repository {
+	return &Mysql{{capitalNameS}}Repository{
+		DB: db,
+	}
+}
+
+type {{capitalNameS}}Service struct {
+	repository {{capitalNameS}}Repository
+}
+
+func New{{capitalNameS}}Service(r {{capitalNameS}}Repository) *{{capitalNameS}}Service {
+	return &{{capitalNameS}}Service{
+		repository: r,
+	}
+}
+
+func renderPath(template ...string) string {
+	path := append(modulePath, template...)
+	return filepath.Join(path...)
+}
